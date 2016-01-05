@@ -181,7 +181,7 @@ function init() {
 
     camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
     scene.add(camera);
-    camera.position.set(-400, 500, 1000);
+    camera.position.set(-400, 500, 1600);
     camera.lookAt(scene.position);
 
     // renderer
@@ -212,17 +212,13 @@ function init() {
         offset_y = d * (resolutionY - 1) / 2,
         offset_z = d * (resolutionZ - 1) / 2;
 
-    // These are some sort of scaling values
-    var s = 40;
-    var s2 = 15;
-
     var textureBall  = THREE.ImageUtils.loadTexture('images/textures/ball.png'),
         textureGlow  = THREE.ImageUtils.loadTexture('images/textures/led1.png'),
         texturePoint = THREE.ImageUtils.loadTexture('images/textures/led4.png'),
         textureOff   = THREE.ImageUtils.loadTexture('images/textures/ledoff.png');
 
     var pointCloudMaterial = new THREE.PointCloudMaterial({
-        size: s,
+        size: 40,
         map: texturePoint,
         vertexColors: THREE.VertexColors,
         transparent: true,
