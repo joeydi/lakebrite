@@ -64,15 +64,12 @@ var container,
     resolutionX = 50,
     resolutionY = 15,
     resolutionZ = 10,
-    distanceLED = 40,
+    distanceX = 8,
+    distanceY = 6,
     layerOffset = true,
-    materialGlow,
-    materialPoint,
-    materialOff,
     particles,
     start = 0,
-    delay = 0,
-    colorOn = 1;
+    delay = 0;
 
 var animationList = {
     'CMSK Rain':            'CMSK.Rain',
@@ -152,7 +149,7 @@ var gifPlayer = function(src) {
         particles.geometry.colors = colors;
         particles.geometry.colorsNeedUpdate = true;
 
-        return -1;
+        return 1;
     }
 };
 
@@ -177,11 +174,11 @@ function init() {
         VIEW_ANGLE = 45,
         ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT,
         NEAR = 0.1,
-        FAR = 20000;
+        FAR = 10000;
 
     camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
     scene.add(camera);
-    camera.position.set(-400, 500, 1600);
+    camera.position.set(-80, 100, 320);
     camera.lookAt(scene.position);
 
     // renderer
@@ -205,12 +202,10 @@ function init() {
     stats.domElement.style.top = '0px';
     container.appendChild( stats.domElement );
 
-    var d = distanceLED;
-
     // Overall offset for the array
-    var offset_x = -d * (resolutionX - 1) / 2,
-        offset_y = d * (resolutionY - 1) / 2,
-        offset_z = d * (resolutionZ - 1) / 2;
+    var offset_x = -distanceX * (resolutionX - 1) / 4,
+        offset_y = distanceY * (resolutionY - 1) / 2,
+        offset_z = distanceY * (resolutionZ - 1) / 2;
 
     var textureBall  = THREE.ImageUtils.loadTexture('images/textures/ball.png'),
         textureGlow  = THREE.ImageUtils.loadTexture('images/textures/led1.png'),
@@ -218,8 +213,8 @@ function init() {
         textureOff   = THREE.ImageUtils.loadTexture('images/textures/ledoff.png');
 
     var pointCloudMaterial = new THREE.PointCloudMaterial({
-        size: 40,
-        map: texturePoint,
+        size: 4,
+        map: textureBall,
         vertexColors: THREE.VertexColors,
         transparent: true,
         alphaTest: 0.5
@@ -230,10 +225,10 @@ function init() {
     for (var z = 0; z < resolutionZ; z++) {
         for (var y = 0; y < resolutionY; y++) {
             for (var x = 0; x < resolutionX; x++) {
-                if ( layerOffset && 0 !== z % 2 ) {
-                    var vertex = new THREE.Vector3(offset_x + d*x + d/2, offset_y - d*y - d/2, offset_z - d*z);
+                if ( layerOffset && 0 !== x % 2 ) {
+                    var vertex = new THREE.Vector3(distanceX/2*x, distanceY*-y + distanceY/2, distanceY*-z - distanceY/2);
                 } else {
-                    var vertex = new THREE.Vector3(offset_x + d*x, offset_y - d*y, offset_z - d*z);
+                    var vertex = new THREE.Vector3(distanceX/2*x, distanceY*-y, distanceY*-z);
                 }
 
                 geometry.vertices.push(vertex);
@@ -242,6 +237,7 @@ function init() {
     }
 
     particles = new THREE.PointCloud(geometry, pointCloudMaterial);
+    particles.position.set(offset_x, offset_y, offset_z);
     scene.add(particles);
 
     // axes
@@ -332,13 +328,13 @@ function cube_clear(color) {
         color = 0x0;
     }
 
-    for (var z = 0; z < resolutionZ; z++) {
-        for (var y = 0; y < resolutionY; y++) {
-            for (var x = 0; x < resolutionX; x++) {
-                cube_set_color(x, y, z, color);
-            }
-        }
+    var colors = [];
+    for (var i = 0; i < resolutionX * resolutionY * resolutionZ; i++) {
+        colors.push(new THREE.Color(color));
     }
+
+    particles.geometry.colors = colors;
+    particles.geometry.colorsNeedUpdate = true;
 }
 
 function buildAxes( length ) {
