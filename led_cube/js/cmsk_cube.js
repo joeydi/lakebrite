@@ -217,9 +217,10 @@ var CMSK = function () {
     }
 
     function AnimationPlaneBoing() {
-        var i = 0, j = CUBE_SIZE-1;
-        var delay = 30;
-        var plane = [AXIS_X, AXIS_Y, AXIS_Z][rand()%3];
+        var i = 0,
+            j = CUBE_SIZE-1,
+            delay = 30,
+            plane = [AXIS_X, AXIS_Y, AXIS_Z][rand() % 3];
 
         color_reset_transition();
 
@@ -244,7 +245,7 @@ var CMSK = function () {
             color_change(1);
 
             return 0;
-        }
+        };
     }
 
     function AnimationBlinky() {
@@ -654,7 +655,7 @@ var CMSK = function () {
                                 } else {
                                     dz = 1;
                                 }
-                            }	
+                            }
                         }
                     }
 
@@ -684,7 +685,7 @@ var CMSK = function () {
                                 } else {
                                     dz = 1;
                                 }
-                            }	
+                            }
                         }
                     }
 
@@ -700,7 +701,7 @@ var CMSK = function () {
                                 } else {
                                     dy = 1;
                                 }
-                            }	
+                            }
                         }
 
                         if (dx == 0) {
@@ -714,7 +715,7 @@ var CMSK = function () {
                                 } else {
                                     dx = 1;
                                 }
-                            }	
+                            }
                         }
                     }
                 }
@@ -841,12 +842,14 @@ var CMSK = function () {
     }
 
     // Set or clear exactly 512 voxels in a random order.
-    function AnimationRandomFiller() {
-        var x,y,z;
-        var loop = 0;
-        var delay = 5;
-        var state = 1;
+    function AnimationRandomFiller(resolutionX, resolutionY, resolutionZ) {
+        var x, y, z,
+            loop = 0,
+            delay = 5,
+            state = 1,
+            max = resolutionX * resolutionY * resolutionZ;
 
+        console.log(resolutionX, resolutionY, resolutionZ);
         color_reset_transition();
 
         var ip = 0;
@@ -864,10 +867,10 @@ var CMSK = function () {
                 return 0;
             },
             function () {
-                if (loop<512) {
-                    x = rand()%8;
-                    y = rand()%8;
-                    z = rand()%8;
+                if (loop < max) {
+                    x = rand() % resolutionX;
+                    y = rand() % resolutionY;
+                    z = rand() % resolutionZ;
 
                     if ((state == 0 && getvoxel(x,y,z) == 0x01) ||
                             (state == 1 && getvoxel(x,y,z) == 0x00)) {

@@ -23,6 +23,12 @@
                 top: 0px; width: 100%;
                 padding: 5px;
             }
+
+            .jsgif {
+                position: absolute;
+                left: 0;
+                bottom: 0;
+            }
         </style>
     </head>
 
@@ -35,6 +41,8 @@
         <script src="js/OrbitControls.js"></script>
         <script src="js/stats.min.js"></script>
         <script src="js/dat.gui.min.js"></script>
+
+        <script src="/libgif/libgif.js"></script>
 
         <script src="js/darrah_cube.js"></script>
         <script src="js/cmsk_cube.js"></script>
@@ -52,42 +60,118 @@
 
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-var container, scene, camera, renderer, controls, stats;
-var RES = 8;
-var distanceLED = 40;
-var materialGlow, materialPoint, materialOff;
-
-var start = 0, delay = 0;
-var colorOn = 1;
+var container,
+    scene,
+    camera,
+    renderer,
+    controls,
+    stats,
+    resolutionX = 50,
+    resolutionY = 15,
+    resolutionZ = 10,
+    distanceLED = 40,
+    layerOffset = true,
+    materialGlow,
+    materialPoint,
+    materialOff,
+    point_array = createNDimArray([resolutionX, resolutionY, resolutionZ]),
+    glow_array = createNDimArray([resolutionX, resolutionY, resolutionZ]),
+    start = 0,
+    delay = 0,
+    colorOn = 1;
 
 var animationList = {
-      'CMSK Rain':            'CMSK.Rain'
-    , 'CMSK Random Filler':   'CMSK.RandomFiller'
-    , 'CMSK Box Woop-Woop':   'CMSK.BoxWoopWoop'
-    , 'CMSK Plane Boing':     'CMSK.PlaneBoing'
-    , 'CMSK Blinky':          'CMSK.Blinky'
-    , 'CMSK Box Shrink-Grow': 'CMSK.BoxShrinkGrow'
-    , 'CMSK Boing-Boing':     'CMSK.BoingBoing'
-    , 'CMSK Fireworks':       'CMSK.Fireworks'
-    , 'CMSK Ripples':         'CMSK.Ripples'
-    , 'CMSK Sidewaves':       'CMSK.Sidewaves'
-    , 'CMSK Sphere Move':     'CMSK.SphereMove'
-    , 'CMSK Line Spin':       'CMSK.LineSpin'
-    , 'CMSK Sine Lines':      'CMSK.SineLines'
-    , 'Darrah SineWave':      'Darrah.SineWave'
-    , 'Darrah Rain':          'Darrah.Rain'
-    , 'Darrah Folder':        'Darrah.Folder'
-    , 'Darrah WipeOut':       'Darrah.WipeOut'
-    , 'Darrah Bouncy':        'Darrah.Bouncy'
-    , 'Darrah ColorWheel':    'Darrah.ColorWheel'
-};
-var guiParams = {
-    animation: animationList['CMSK Ripples']
-    , spin: true
+    'CMSK Rain':            'CMSK.Rain',
+    'CMSK Random Filler':   'CMSK.RandomFiller',
+    'CMSK Box Woop-Woop':   'CMSK.BoxWoopWoop',
+    'CMSK Plane Boing':     'CMSK.PlaneBoing',
+    'CMSK Blinky':          'CMSK.Blinky',
+    'CMSK Box Shrink-Grow': 'CMSK.BoxShrinkGrow',
+    'CMSK Boing-Boing':     'CMSK.BoingBoing',
+    'CMSK Fireworks':       'CMSK.Fireworks',
+    'CMSK Ripples':         'CMSK.Ripples',
+    'CMSK Sidewaves':       'CMSK.Sidewaves',
+    'CMSK Sphere Move':     'CMSK.SphereMove',
+    'CMSK Line Spin':       'CMSK.LineSpin',
+    'CMSK Sine Lines':      'CMSK.SineLines',
+    'Darrah SineWave':      'Darrah.SineWave',
+    'Darrah Rain':          'Darrah.Rain',
+    'Darrah Folder':        'Darrah.Folder',
+    'Darrah WipeOut':       'Darrah.WipeOut',
+    'Darrah Bouncy':        'Darrah.Bouncy',
+    'Darrah ColorWheel':    'Darrah.ColorWheel'
 };
 
-//var animation = function () { return 100; };
-var animation = CMSK.Ripples();
+var gifPlayer = function(src) {
+    var img = document.createElement('img'),
+        gif,
+        context,
+        imageData,
+        x, y, z,
+        r, g, b,
+        i,
+        color;
+
+    img.setAttribute('src', src);
+    document.body.appendChild(img);
+
+    gif = new SuperGif({gif: img, loop_mode: true, auto_play: true});
+    gif.load(function () {
+        context = gif.get_canvas().getContext('2d');
+    });
+
+    return function () {
+        try {
+            imageData = context.getImageData(0, 0, resolutionX, resolutionY*resolutionZ);
+        } catch (e) {
+            return 1000;
+        }
+
+        // x = rand() % resolutionX;
+        // y = rand() % resolutionY;
+        // z = rand() % resolutionZ;
+
+        // r = rand() % 255;
+        // g = rand() % 255;
+        // b = rand() % 255;
+
+
+        // i = ( (z * resolutionX * resolutionY * 4) + (y * resolutionX * 4) + (x * 4) );
+        // r = imageData.data[i];
+        // g = imageData.data[i + 1];
+        // b = imageData.data[i + 2];
+
+        // console.log(i);
+
+        // color = RGB2Hex(r, g, b)
+        // cube_set_color(x, y, z, color);
+
+        for (var z = 0; z < resolutionZ; z++) {
+            for (var y = 0; y < resolutionY; y++) {
+                for (var x = 0; x < resolutionX; x++) {
+                    i = ( (z * resolutionX * resolutionY * 4) + ( (resolutionY - y) * resolutionX * 4) + (x * 4) );
+                    r = imageData.data[i];
+                    g = imageData.data[i + 1];
+                    b = imageData.data[i + 2];
+
+                    color = RGB2Hex(r, g, b)
+                    cube_set_color(x, y, z, color);
+                }
+            }
+        }
+
+        return 5;
+    }
+};
+
+var guiParams = {
+    animation: 'CMSK.RandomFiller',
+    spin: true,
+    axes: true
+};
+
+// var animation = CMSK.RandomFiller(resolutionX, resolutionY, resolutionZ);
+var animation = gifPlayer('/led_cube/images/gifs/animation1_test.gif');
 
 init();
 animate();
@@ -96,18 +180,24 @@ function init() {
     scene = new THREE.Scene();
 
     // camera
-    var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
-    var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
+    var SCREEN_WIDTH = window.innerWidth,
+        SCREEN_HEIGHT = window.innerHeight,
+        VIEW_ANGLE = 45,
+        ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT,
+        NEAR = 0.1,
+        FAR = 20000;
+
     camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
     scene.add(camera);
     camera.position.set(-400, 500, 1000);
     camera.lookAt(scene.position);
 
     // renderer
-    if ( Detector.webgl )
+    if ( Detector.webgl ) {
         renderer = new THREE.WebGLRenderer({ antialias: true });
-    else
+    } else {
         renderer = new THREE.CanvasRenderer();
+    }
     renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     container = document.getElementById('container');
     container.appendChild( renderer.domElement );
@@ -115,7 +205,7 @@ function init() {
     // controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.maxPolarAngle = Math.PI/2;
-    controls.autoRotate = true;
+    controls.autoRotate = guiParams.spin;
 
     // stats
     stats = new Stats();
@@ -124,64 +214,108 @@ function init() {
     container.appendChild( stats.domElement );
 
     var d = distanceLED;
-    var offset_x = -d*(RES-1)/2, offset_y = -d*(RES-1)/2+30, offset_z = -150;
-    var s = 40;
+
+    // Overall offset for the array
+    var offset_x = -d * (resolutionX - 1) / 2,
+        offset_y = -d * (resolutionY - 1) / 2,
+        offset_z = -d * (resolutionZ - 1) / 2;
+
+    // These are some sort of scaling values
+    var s = 10;
     var s2 = 15;
 
-    // floor
-    var floorMaterial = new THREE.MeshPhongMaterial({
-        color: 0,
-        shininess: 2
-    });
-    var floorGeometry = new THREE.PlaneGeometry(2000, 2000, 10, 10);
-    var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.position.y = offset_y - 30;
-    floor.rotation.x = -Math.PI / 2;
-    scene.add(floor);
-
-    var textureGlow  = THREE.ImageUtils.loadTexture('images/textures/led1.png');
-    var texturePoint = THREE.ImageUtils.loadTexture('images/textures/led4.png');
-    var textureOff   = THREE.ImageUtils.loadTexture('images/textures/ledoff.png');
+    var textureGlow  = THREE.ImageUtils.loadTexture('images/textures/led1.png'),
+        texturePoint = THREE.ImageUtils.loadTexture('images/textures/led4.png'),
+        textureOff   = THREE.ImageUtils.loadTexture('images/textures/ledoff.png');
 
     materialGlow  = new THREE.SpriteMaterial({ map: textureGlow,  color: 0x0, transparent: true } );
     materialPoint = new THREE.SpriteMaterial({ map: texturePoint, color: 0x0, transparent: true } );
     materialOff   = new THREE.SpriteMaterial({ map: textureOff,   color: 0xffffff, transparent: true, opacity: 0.2} );
 
-    for (var z = 0; z < RES; z++) {
-        for (var y = 0; y < RES; y++) {
-            for (var x = 0; x < RES; x++) {
-                var sprite = new THREE.Sprite(materialOff);
-                sprite.position.set(offset_x + d*x, offset_y + d*y, offset_z + d*z);
-                sprite.scale.set(s2, s2, s2);
-                scene.add(sprite);
+    var radius = 50,
+    segments = 16,
+    rings = 16;
 
-                var sprite = new THREE.Sprite(materialGlow.clone());
-                sprite.material.opacity = 0;
-                sprite.position.set(offset_x + d*x, offset_y + d*y, offset_z + d*z);
-                sprite.scale.set(s, s, s);
-                scene.add(sprite);
+    var sphereMaterial = new THREE.MeshBasicMaterial({color: 0xCC0000});
+
+//   var pointLight =
+//   new THREE.PointLight(0xFFFFFF);
+
+// // set its position
+// pointLight.position.x = 10;
+// pointLight.position.y = 50;
+// pointLight.position.z = 130;
+
+// // add to the scene
+// scene.add(pointLight);
+
+    // create a new mesh with
+    // sphere geometry - we will cover
+    // the sphereMaterial next!
+    // var sphere = new THREE.Mesh(
+
+    //   new THREE.SphereGeometry(
+    //     radius,
+    //     segments,
+    //     rings),
+
+    //   sphereMaterial);
+
+    // // add the sphere to the scene
+    // scene.add(sphere);
+
+    for (var z = 0; z < resolutionZ; z++) {
+        for (var y = 0; y < resolutionY; y++) {
+            for (var x = 0; x < resolutionX; x++) {
+                // var point = new THREE.Sprite(materialOff);
+                // if ( layerOffset && 0 !== z % 2 ) {
+                //     point.position.set(offset_x + d*x + d/2, offset_y + d*y + d/2, offset_z + d*z);
+                // } else {
+                //     point.position.set(offset_x + d*x, offset_y + d*y, offset_z + d*z);
+                // }
+                // point.scale.set(s2, s2, s2);
+                // scene.add(point);
+                // point_array[x][y][z] = point;
+
+                // var glow = new THREE.Mesh(new THREE.SphereGeometry(0.1), sphereMaterial.clone());
+                var glow = new THREE.Sprite();
+
+                // var glow = new THREE.Sprite(materialGlow.clone());
+                // glow.material.opacity = 0;
+                if ( layerOffset && 0 !== z % 2 ) {
+                    glow.position.set(offset_x + d*x + d/2, offset_y + d*y + d/2, offset_z + d*z);
+                } else {
+                    glow.position.set(offset_x + d*x, offset_y + d*y, offset_z + d*z);
+                }
+                glow.scale.set(s, s, s);
+                scene.add(glow);
+                glow_array[x][y][z] = glow;
             }
         }
     }
 
-    for (var z = 0; z < RES; z++) {
-        for (var x = 0; x < RES; x++) {
-            var light = new THREE.PointLight(0x0000ff, 0.0, 700);
-            light.position.set(offset_x + d*x, offset_y, offset_z + d*z);
-
-            scene.add(light);
-        }
-    }
+    // axes
+    axes = buildAxes(1000);
+    scene.add(axes);
 
     var gui = new dat.GUI();
+
     gui.add(guiParams, 'animation', animationList).onChange(function () {
-        var f = guiParams['animation'].split('.');
-        animation = window[f[0]][f[1]]();
+        var f = guiParams.animation.split('.');
+        animation = window[f[0]][f[1]](resolutionX, resolutionY, resolutionZ);
         cube_clear();
     });
+
     gui.add(guiParams, 'spin').onChange(function () {
         controls.autoRotate = !controls.autoRotate;
     });
+
+    gui.add(guiParams, 'axes').onChange(function () {
+        var func = guiParams.axes ? 'add' : 'remove';
+
+        scene[func](axes);
+    });
+
     gui.open();
 
     window.addEventListener('resize', onWindowResize, false);
@@ -225,7 +359,7 @@ function render() {
 }
 
 function cube_check_coords(x, y, z) {
-    return (x >= 0 && x < RES && y >= 0 && y < RES && z >= 0 && z < RES);
+    return (x >= 0 && x < resolutionX && y >= 0 && y < resolutionY && z >= 0 && z < resolutionZ);
 }
 
 function cube_get_color(x, y, z) {
@@ -233,12 +367,9 @@ function cube_get_color(x, y, z) {
         return -1;
     }
 
-    var i = 2 + (x + y*RES + z*RES*RES)*2;
-    return scene.children[i+1].material.color.getHex();
-}
+    var glow = glow_array[x][y][z];
 
-function get_scene_offset(x, y, z) {
-    return 2 + (x + y*RES + z*RES*RES)*2;
+    return glow.material.color.getHex();
 }
 
 function cube_set_color(x, y, z, color) {
@@ -246,46 +377,22 @@ function cube_set_color(x, y, z, color) {
         return;
     }
 
-    var i = get_scene_offset(x, y, z);
+    var //point = point_array[x][y][z],
+        glow = glow_array[x][y][z];
+        // hsl = point.material.color.getHSL();
 
     if (color == 0x0) {
         // turn off the LED
-        scene.children[i].material = materialOff;
-        scene.children[i+1].material.opacity = 0;
-        scene.children[i+1].material.color.setHex(color);
+        // point.material = materialOff;
+        // glow.material.opacity = 0;
+        glow.material.color.setHex(color);
     } else {
         // turn on the LED
-        scene.children[i].material = materialPoint.clone();
-        scene.children[i].material.color.setHex(color);
-        var hsl = scene.children[i].material.color.getHSL();
-        scene.children[i].material.color.setHSL(hsl.h, hsl.s, 0.7);
-
-        scene.children[i+1].material.opacity = 1;
-        scene.children[i+1].material.color.setHex(color);
-    }
-
-    // update the light
-    var light = scene.children[2 + RES*RES*RES*2 + x + z*RES];
-    var lightOff = true;
-
-    for (var yy = 0; yy < RES; yy++) {
-        var ledGlow = scene.children[get_scene_offset(x, yy, z)+1];
-        if (ledGlow.material.opacity == 1) {
-            if (lightOff) {
-                light.intensity = 1.0;
-                light.color.setHex(ledGlow.material.color.getHex());
-                light.position.y = yy*distanceLED;
-
-                lightOff = false;
-            } else {
-                var mixinColor = ledGlow.material.color.clone();
-                light.color.lerp(mixinColor, 1/yy);
-            }
-        }
-    }
-
-    if (lightOff) {
-        light.intensity = 0;
+        // point.material = materialPoint.clone();
+        // point.material.color.setHex(color);
+        // point.material.color.setHSL(hsl.h, hsl.s, 0.7);
+        // glow.material.opacity = 1;
+        glow.material.color.setHex(color);
     }
 }
 
@@ -294,13 +401,67 @@ function cube_clear(color) {
         color = 0x0;
     }
 
-    for (var z = 0; z < RES; z++) {
-        for (var y = 0; y < RES; y++) {
-            for (var x = 0; x < RES; x++) {
+    for (var z = 0; z < resolutionZ; z++) {
+        for (var y = 0; y < resolutionY; y++) {
+            for (var x = 0; x < resolutionX; x++) {
                 cube_set_color(x, y, z, color);
             }
         }
     }
+}
+
+function buildAxes( length ) {
+    var axes = new THREE.Object3D();
+
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( length, 0, 0 ), 0xFF0000, false ) ); // +X
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( -length, 0, 0 ), 0xFF0000, true) ); // -X
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, length, 0 ), 0x00FF00, false ) ); // +Y
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, -length, 0 ), 0x00FF00, true ) ); // -Y
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, length ), 0x0000FF, false ) ); // +Z
+    axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
+
+    return axes;
+
+}
+
+function buildAxis( src, dst, colorHex, dashed ) {
+    var geom = new THREE.Geometry(),
+        mat;
+
+    if(dashed) {
+        mat = new THREE.LineDashedMaterial({ linewidth: 3, color: colorHex, dashSize: 3, gapSize: 3 });
+    } else {
+        mat = new THREE.LineBasicMaterial({ linewidth: 3, color: colorHex });
+    }
+
+    geom.vertices.push( src.clone() );
+    geom.vertices.push( dst.clone() );
+
+    // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
+    geom.computeLineDistances();
+
+    var axis = new THREE.Line( geom, mat, THREE.LinePieces );
+
+    return axis;
+
+}
+
+function createNDimArray(dimensions) {
+    var t, i = 0, s = dimensions[0], arr = new Array(s);
+    if ( dimensions.length < 3 ) for ( t = dimensions[1] ; i < s ; ) arr[i++] = new Array(t);
+    else for ( t = dimensions.slice(1) ; i < s ; ) arr[i++] = createNDimArray(t);
+    return arr;
+}
+
+function RGB2Hex(r, g, b) {
+    var hex = b;
+    hex |= (g << 8);
+    hex |= (r << 16);
+    return hex;
+}
+
+function rand() {
+    return Math.floor(Math.random() * 999999);
 }
 
         </script>
