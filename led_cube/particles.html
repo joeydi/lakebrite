@@ -65,7 +65,7 @@ var container,
     resolutionY = 15,
     resolutionZ = 10,
     distanceLED = 40,
-    layerOffset = false,
+    layerOffset = true,
     materialGlow,
     materialPoint,
     materialOff,
@@ -235,7 +235,7 @@ function init() {
         for (var y = 0; y < resolutionY; y++) {
             for (var x = 0; x < resolutionX; x++) {
                 if ( layerOffset && 0 !== z % 2 ) {
-                    var vertex = new THREE.Vector3(offset_x + d*x + d/2, offset_y - d*y - d/2, offset_z + d*z);
+                    var vertex = new THREE.Vector3(offset_x + d*x + d/2, offset_y - d*y - d/2, offset_z - d*z);
                 } else {
                     var vertex = new THREE.Vector3(offset_x + d*x, offset_y - d*y, offset_z - d*z);
                 }
