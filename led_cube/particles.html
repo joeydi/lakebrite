@@ -120,22 +120,22 @@ var gifPlayer = function(src) {
         gif: img,
         loop_mode: true,
         auto_play: true,
-        show_progress_bar: false
+        draw_while_loading: true,
+        show_progress_bar: true
     });
 
     Array.prototype.forEach.call( oldGifs, function( node ) {
         node.parentNode.removeChild( node );
     });
 
-    gif.load();
+    gif.load(function () {
+        context = gif.get_canvas().getContext('2d');
+    });
 
     return function () {
         var colors = [];
 
         try {
-            if ('undefined' === typeof context) {
-                context = gif.get_canvas().getContext('2d');
-            }
             imageData = context.getImageData(0, 0, resolutionX, resolutionY*resolutionZ);
         } catch (e) {
             return 1000;
