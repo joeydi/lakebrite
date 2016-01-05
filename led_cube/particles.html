@@ -145,7 +145,7 @@ var gifPlayer = function(src) {
             r = imageData.data[i];
             g = imageData.data[i + 1];
             b = imageData.data[i + 2];
-            color = new THREE.Color('rgb('+r+', '+g+', '+b+')');
+            color = new THREE.Color(RGB2Hex(r, g, b));
             colors.push(color);
         }
 
@@ -350,30 +350,6 @@ function cube_get_color(x, y, z) {
     return glow.material.color.getHex();
 }
 
-// function cube_set_color(x, y, z, color) {
-//     if (!cube_check_coords(x, y, z)) {
-//         return;
-//     }
-
-//     // var point = point_array[x][y][z],
-//         // glow = glow_array[x][y][z];
-//         // hsl = point.material.color.getHSL();
-
-//     if (color == 0x0) {
-//         // turn off the LED
-//         // point.material = materialOff;
-//         // glow.material.opacity = 0;
-//         // glow.material.color.setHex(color);
-//     } else {
-//         // turn on the LED
-//         // point.material = materialPoint.clone();
-//         // point.material.color.setHex(color);
-//         // point.material.color.setHSL(hsl.h, hsl.s, 0.7);
-//         // glow.material.opacity = 1;
-//         // glow.material.color.setHex(color);
-//     }
-// }
-
 function cube_clear(color) {
     if (typeof color === 'undefined') {
         color = 0x0;
@@ -424,22 +400,11 @@ function buildAxis( src, dst, colorHex, dashed ) {
 
 }
 
-// function createNDimArray(dimensions) {
-//     var t, i = 0, s = dimensions[0], arr = new Array(s);
-//     if ( dimensions.length < 3 ) for ( t = dimensions[1] ; i < s ; ) arr[i++] = new Array(t);
-//     else for ( t = dimensions.slice(1) ; i < s ; ) arr[i++] = createNDimArray(t);
-//     return arr;
-// }
-
-// function RGB2Hex(r, g, b) {
-//     var hex = b;
-//     hex |= (g << 8);
-//     hex |= (r << 16);
-//     return hex;
-// }
-
-function rand() {
-    return Math.floor(Math.random() * 999999);
+function RGB2Hex(r, g, b) {
+    var hex = b;
+    hex |= (g << 8);
+    hex |= (r << 16);
+    return hex;
 }
 
         </script>
