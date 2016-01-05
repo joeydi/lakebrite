@@ -279,8 +279,8 @@ THREE.OrbitControls = function ( object, domElement ) {
       rotateEnd.set( event.clientX, event.clientY );
       rotateDelta.subVectors( rotateEnd, rotateStart );
 
-      momentumLeft = event.webkitMovementX;
-      momentumUp   = event.webkitMovementY;
+      momentumLeft = event.movementX || event.mozMovementX || 0;
+      momentumUp   = event.movementY || event.mozMovementY || 0;
       // momentumLeft += 2 * Math.PI * rotateDelta.x / PIXELS_PER_ROUND * scope.userRotateSpeed;
       // momentumUp   += 2 * Math.PI * rotateDelta.y / PIXELS_PER_ROUND * scope.userRotateSpeed;
 
@@ -308,8 +308,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 
     } else if ( state === STATE.PAN ) {
 
-      var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-      var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+      var movementX = event.movementX || event.mozMovementX || 0;
+      var movementY = event.movementY || event.mozMovementY || 0;
 
       scope.pan( new THREE.Vector3( - movementX, movementY, 0 ) );
 

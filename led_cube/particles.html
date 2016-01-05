@@ -32,7 +32,7 @@
     </head>
 
     <body>
-        <div id="info"><a href="http://threejs.org" target="_blank">three.js</a> LED cube</div>
+        <div id="info"><a href="http://threejs.org" target="_blank">three.js</a> Lake Brite</div>
         <div id="container"></div>
 
         <script src="js/three.min.js"></script>
@@ -68,35 +68,15 @@ var container,
     distanceY = 6,
     layerOffset = true,
     particles,
+    texture,
     start = 0,
     delay = 0;
-
-var animationList = {
-    'CMSK Rain':            'CMSK.Rain',
-    'CMSK Random Filler':   'CMSK.RandomFiller',
-    'CMSK Box Woop-Woop':   'CMSK.BoxWoopWoop',
-    'CMSK Plane Boing':     'CMSK.PlaneBoing',
-    'CMSK Blinky':          'CMSK.Blinky',
-    'CMSK Box Shrink-Grow': 'CMSK.BoxShrinkGrow',
-    'CMSK Boing-Boing':     'CMSK.BoingBoing',
-    'CMSK Fireworks':       'CMSK.Fireworks',
-    'CMSK Ripples':         'CMSK.Ripples',
-    'CMSK Sidewaves':       'CMSK.Sidewaves',
-    'CMSK Sphere Move':     'CMSK.SphereMove',
-    'CMSK Line Spin':       'CMSK.LineSpin',
-    'CMSK Sine Lines':      'CMSK.SineLines',
-    'Darrah SineWave':      'Darrah.SineWave',
-    'Darrah Rain':          'Darrah.Rain',
-    'Darrah Folder':        'Darrah.Folder',
-    'Darrah WipeOut':       'Darrah.WipeOut',
-    'Darrah Bouncy':        'Darrah.Bouncy',
-    'Darrah ColorWheel':    'Darrah.ColorWheel'
-};
 
 var gifList = {
     'Animation 1':          'animation1_test.gif',
     'Animation 2':          'animation2_test.gif',
-    'Lake Temperature':     'temperature.gif'
+    'Lake Temperature':     'temperature.gif',
+    'Fish':                 'fish.gif'
 };
 
 var gifPlayer = function(src) {
@@ -162,8 +142,13 @@ var guiParams = {
 
 var animation = gifPlayer('/led_cube/images/gifs/animation1_test.gif');
 
-init();
-animate();
+// do async texture loading, then kick things off
+var loader = new THREE.TextureLoader();
+loader.load('images/textures/ball.png', function (t) {
+    texture = t;
+    init();
+    animate();
+});
 
 function init() {
     scene = new THREE.Scene();
@@ -207,14 +192,9 @@ function init() {
         offset_y = distanceY * (resolutionY - 1) / 2,
         offset_z = distanceY * (resolutionZ - 1) / 2;
 
-    var textureBall  = THREE.ImageUtils.loadTexture('images/textures/ball.png'),
-        textureGlow  = THREE.ImageUtils.loadTexture('images/textures/led1.png'),
-        texturePoint = THREE.ImageUtils.loadTexture('images/textures/led4.png'),
-        textureOff   = THREE.ImageUtils.loadTexture('images/textures/ledoff.png');
-
-    var pointCloudMaterial = new THREE.PointCloudMaterial({
+    var pointsMaterial = new THREE.PointsMaterial({
         size: 4,
-        map: textureBall,
+        map: texture,
         vertexColors: THREE.VertexColors,
         transparent: true,
         alphaTest: 0.5
@@ -236,7 +216,7 @@ function init() {
         }
     }
 
-    particles = new THREE.PointCloud(geometry, pointCloudMaterial);
+    particles = new THREE.Points(geometry, pointsMaterial);
     particles.position.set(offset_x, offset_y, offset_z);
     scene.add(particles);
 
@@ -245,12 +225,6 @@ function init() {
     scene.add(axes);
 
     var gui = new dat.GUI();
-
-    gui.add(guiParams, 'animation', animationList).onChange(function () {
-        var f = guiParams.animation.split('.');
-        animation = window[f[0]][f[1]](resolutionX, resolutionY, resolutionZ);
-        cube_clear();
-    });
 
     gui.add(guiParams, 'gif', gifList).onChange(function () {
         var prefix = '/led_cube/images/gifs/';
@@ -318,9 +292,21 @@ function cube_get_color(x, y, z) {
         return -1;
     }
 
-    var glow = glow_array[x][y][z];
+    var i = ( (z * resolutionX * resolutionY) + (y * resolutionX) + (x) ),
+        color = particles.geometry.colors[i];
 
-    return glow.material.color.getHex();
+    return color.getHex();
+}
+
+function cube_set_color(x, y, z, color) {
+    if (!cube_check_coords(x, y, z)) {
+        return -1;
+    }
+
+    var i = ( (z * resolutionX * resolutionY) + (y * resolutionX) + (x) );
+
+    particles.geometry.colors[i].setHex(color);
+    particles.geometry.colorsNeedUpdate = true;
 }
 
 function cube_clear(color) {
@@ -348,7 +334,6 @@ function buildAxes( length ) {
     axes.add( buildAxis( new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -length ), 0x0000FF, true ) ); // -Z
 
     return axes;
-
 }
 
 function buildAxis( src, dst, colorHex, dashed ) {
@@ -367,7 +352,7 @@ function buildAxis( src, dst, colorHex, dashed ) {
     // This one is SUPER important, otherwise dashed lines will appear as simple plain lines
     geom.computeLineDistances();
 
-    var axis = new THREE.Line( geom, mat, THREE.LinePieces );
+    var axis = new THREE.Line( geom, mat, THREE.LineSegments );
 
     return axis;
 
