@@ -200,8 +200,8 @@ function init() {
         alphaTest: 0.5
     });
 
+    // Create the vertices
     var geometry = new THREE.Geometry();
-
     for (var z = 0; z < resolutionZ; z++) {
         for (var y = 0; y < resolutionY; y++) {
             for (var x = 0; x < resolutionX; x++) {
@@ -216,6 +216,14 @@ function init() {
         }
     }
 
+    // Create the initial colors
+    var colors = [];
+    for (var i = 0; i < resolutionX * resolutionY * resolutionZ; i++) {
+        colors.push(new THREE.Color(0x0));
+    }
+    geometry.colors = colors;
+
+    // Create the particle system and add it to the scene
     particles = new THREE.Points(geometry, pointsMaterial);
     particles.position.set(offset_x, offset_y, offset_z);
     scene.add(particles);
