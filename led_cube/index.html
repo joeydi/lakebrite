@@ -11,7 +11,7 @@
                 font-size:13px;
                 text-align:center;
                 font-weight: bold;
-                background-color: #222;
+                background-color: #111;
                 margin: 0px;
                 overflow: hidden;
             }
@@ -75,6 +75,8 @@ var container,
 var gifList = {
     'Animation 1':          'animation1_test.gif',
     'Animation 2':          'animation2_test.gif',
+    'Animation 3':          'animation3_test.gif',
+    'Animation 4':          'animation4_test.gif',
     'Lake Temperature':     'temperature.gif',
     'Fish':                 'fish.gif'
 };
@@ -135,12 +137,12 @@ var gifPlayer = function(src) {
 
 var guiParams = {
     animation: 'CMSK.RandomFiller',
-    gif: '/led_cube/images/gifs/animation1_test.gif',
+    gif: 'animation4_test.gif',
     spin: false,
     axes: true
 };
 
-var animation = gifPlayer('/led_cube/images/gifs/animation1_test.gif');
+var animation = gifPlayer('/led_cube/images/gifs/' + guiParams.gif);
 
 // do async texture loading, then kick things off
 var loader = new THREE.TextureLoader();
