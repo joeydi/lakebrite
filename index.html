@@ -142,7 +142,7 @@ var guiParams = {
     axes: true
 };
 
-var animation = gifPlayer('/led_cube/images/gifs/' + guiParams.gif);
+var animation = gifPlayer('/images/gifs/' + guiParams.gif);
 
 // do async texture loading, then kick things off
 var loader = new THREE.TextureLoader();
@@ -237,7 +237,7 @@ function init() {
     var gui = new dat.GUI();
 
     gui.add(guiParams, 'gif', gifList).onChange(function () {
-        var prefix = '/led_cube/images/gifs/';
+        var prefix = '/images/gifs/';
         animation = gifPlayer(prefix + guiParams.gif);
         cube_clear();
     });
