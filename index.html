@@ -11,7 +11,7 @@
                 font-size: 13px;
                 text-align: center;
                 font-weight: bold;
-                background-color: #111;
+                background-color: #222;
                 margin: 0;
                 overflow: hidden;
             }
@@ -139,7 +139,7 @@ var guiParams = {
     animation: 'CMSK.RandomFiller',
     gif: 'animation4_test.gif',
     spin: false,
-    axes: true
+    axes: false
 };
 
 var animation = gifPlayer('/images/gifs/' + guiParams.gif);
@@ -165,7 +165,7 @@ function init() {
 
     camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
     scene.add(camera);
-    camera.position.set(-80, 100, 320);
+    camera.position.set(-80, 60, 200);
     camera.lookAt(scene.position);
 
     // renderer
