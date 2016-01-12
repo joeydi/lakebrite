@@ -234,7 +234,9 @@ function init() {
 
     // axes
     axes = buildAxes(1000);
-    scene.add(axes);
+    if (guiParams.axes) {
+        scene.add(axes);
+    }
 
     var gui = new dat.GUI();
 
@@ -250,7 +252,6 @@ function init() {
 
     gui.add(guiParams, 'axes').onChange(function () {
         var func = guiParams.axes ? 'add' : 'remove';
-
         scene[func](axes);
     });
 
