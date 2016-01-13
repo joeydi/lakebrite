@@ -553,11 +553,11 @@
                 }
                 // XXX Figure out alpha fillRect.
                 //ctx.fillStyle = 'salmon';
-                ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                ctx.fillStyle = 'rgba(32,216,254,0.4)';
                 ctx.fillRect(mid, top, width - mid, height);
 
                 //ctx.fillStyle = 'teal';
-                ctx.fillStyle = 'rgba(255,0,22,.8)';
+                ctx.fillStyle = 'rgba(32,216,254,.8)';
                 ctx.fillRect(0, top, mid, height);
             }
         };
