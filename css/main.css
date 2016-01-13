@@ -16,7 +16,6 @@ header {
     top: 0;
     width: 100%;
     padding: 10px;
-    background-color: rgba(0,0,0,0.25);
 }
 
 header h1 {
@@ -43,6 +42,20 @@ header .btn-group {
     color: #20D8FE;
     font-weight: bold;
     text-transform: uppercase;
+}
+
+.btn-default:hover,
+.btn-default:active,
+.btn-default:focus {
+    background-color: #166E8C !important;
+    border-color: #20D8FE !important;
+    color: #20D8FE !important;
+}
+
+.btn-default.active {
+    background-color: #20D8FE;
+    border-color: #20D8FE;
+    color: #113953;
 }
 
 .jsgif {
