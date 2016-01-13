@@ -1,0 +1,87 @@
+body {
+    color: #fff;
+    font-family: 'effra', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    background: #113953;
+    background: -webkit-linear-gradient(#113953, #081A26);
+    background: linear-gradient(#113953, #081A26);
+    -webkit-font-smoothing: antialiased;
+}
+
+header {
+    color: #20D8FE;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(0,0,0,0.25);
+}
+
+header h1 {
+    display: inline-block;
+    margin: 0;
+    font-weight: 300;
+}
+
+header .controls {
+    float: right;
+}
+
+header .controls > *{
+    margin-left: 10px;
+}
+
+header .btn-group {
+    display: inline-block;
+}
+
+.btn-default {
+    background-color: transparent;
+    border-color: #20D8FE;
+    color: #20D8FE;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.jsgif {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+#stats {
+    display: inline-block;
+    width: auto !important;
+    vertical-align: middle;
+}
+
+#fps,
+#ms {
+    padding: 3px !important;
+    border-radius: 3px;
+    background-color: #081A26 !important;
+}
+
+#fpsText,
+#msText {
+    display: inline-block;
+    margin: 0 5px;
+    vertical-align: middle;
+    font-family: 'effra', sans-serif !important;
+    font-size: 12px !important;
+    color: #20D8FE !important;
+}
+
+#fpsGraph,
+#msGraph {
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #20D8FE !important;
+}
+
+#fpsGraph span,
+#msGraph span {
+    background-color: #0d2a3e !important;
+}
