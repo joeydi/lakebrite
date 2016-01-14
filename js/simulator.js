@@ -5,7 +5,7 @@
  *      http://www.instructables.com/id/Led-Cube-8x8x8/ by Christian Moen and
  *          Ståle Kristoffersen.
  *      http://www.kevindarrah.com/?cat=99 by Kevin Darrah
- * 
+ *
  */
 
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
@@ -29,7 +29,7 @@ var container,
 
 var gifPlayer = function(src) {
     var img = document.createElement('img'),
-        oldGifs = document.querySelectorAll('.jsgif'),
+        oldGifs = document.querySelectorAll('.jsgif, canvas[data-apng-src]'),
         gif,
         context,
         imageData,
@@ -38,24 +38,33 @@ var gifPlayer = function(src) {
         i,
         color;
 
-    img.setAttribute('src', src);
-    document.body.appendChild(img);
-
-    gif = new SuperGif({
-        gif: img,
-        loop_mode: true,
-        auto_play: true,
-        draw_while_loading: true,
-        show_progress_bar: true
-    });
-
+    // Remove old gif/png players
     Array.prototype.forEach.call( oldGifs, function( node ) {
         node.parentNode.removeChild( node );
     });
 
-    gif.load(function () {
-        context = gif.get_canvas().getContext('2d');
-    });
+    img.setAttribute('src', src);
+    document.body.appendChild(img);
+
+    if (-1 !== src.indexOf('.gif')) {
+        gif = new SuperGif({
+            gif: img,
+            loop_mode: true,
+            auto_play: true,
+            draw_while_loading: true,
+            show_progress_bar: true
+        });
+
+        gif.load(function () {
+            context = gif.get_canvas().getContext('2d');
+        });
+    } else if (-1 !== src.indexOf('.png') || -1 !== src.indexOf('.apng')) {
+        APNG.animateImage(img).then(function () {
+            context = $('canvas[data-apng-src]').get(0).getContext('2d');
+        });
+    } else {
+        alert('File must be either Animated GIF or Animated PNG');
+    }
 
     return function () {
         var colors = [];
@@ -76,11 +85,11 @@ var gifPlayer = function(src) {
 
         particles.geometry.colors = colors;
         particles.geometry.colorsNeedUpdate = true;
-    }
+    };
 };
 
 var guiParams = {
-    gif: 'images/gifs/animation4_test.gif',
+    gif: 'images/animations/animation5.png',
     spin: false,
     axes: false
 };
