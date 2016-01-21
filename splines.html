@@ -201,8 +201,8 @@
 
 		function addGeometry( geometry, color ) {
 			var pointsMaterial = new THREE.PointsMaterial({
-		        size: 0.1,
-		        // map: texture,
+		        size: 0.15,
+		        map: texture,
 		        vertexColors: THREE.VertexColors,
 		        transparent: true,
 		        alphaTest: 0.5
@@ -247,9 +247,12 @@
 			cameraEye.visible = showCameraHelper;
 		}
 
-
-		init();
-		animate();
+		var loader = new THREE.TextureLoader();
+		loader.load('images/textures/ball.png', function (t) {
+		    texture = t;
+		    init();
+			animate();
+		});
 
 		function init() {
 
@@ -266,7 +269,7 @@
 			info.innerHTML += dropdown;
 
 			info.innerHTML += '<br/>Scale: <select id="scale" onchange="setScale()"><option>1</option><option>2</option><option>4</option><option>6</option><option>10</option></select>';
-			info.innerHTML += '<br/>Extrusion Segments: <select onchange="addTube()" id="segments"><option>50</option><option>150</option><option>200</option><option selected>1000</option></select>';
+			info.innerHTML += '<br/>Extrusion Segments: <select onchange="addTube()" id="segments"><option>50</option><option>150</option><option>200</option><option selected>750</option></select>';
 			info.innerHTML += '<br/>Radius Segments: <select id="radiusSegments" onchange="addTube()"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option selected>50</option></select>';
 			info.innerHTML += '<br/>Closed:<input id="closed" onchange="addTube()" type="checkbox" checked />';
 
@@ -424,7 +427,7 @@
 
 			// Try Animate Camera Along Spline
 			var time = Date.now();
-			var looptime = 20 * 1000;
+			var looptime = 30 * 1000;
 			var t = ( time % looptime ) / looptime;
 
 			var pos = tube.parameters.path.getPointAt( t );
