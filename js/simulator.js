@@ -89,7 +89,7 @@ var gifPlayer = function(src) {
 };
 
 var guiParams = {
-    gif: 'images/animations/animation5.png',
+    gif: 'images/animations/fmm.png',
     spin: false,
     axes: false
 };
@@ -117,7 +117,7 @@ function initScene() {
 
     camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
     scene.add(camera);
-    camera.position.set(-80, 60, 200);
+    camera.position.set(-80, 0, 350);
     camera.lookAt(scene.position);
 
     // renderer
