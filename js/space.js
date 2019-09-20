@@ -1,64 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>LakeBrite Simulator</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <script src="https://use.typekit.net/kzo6vxm.js"></script>
-        <script>try{Typekit.load({ async: true });}catch(e){}</script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/main.css" />
-    </head>
-
-    <body>
-        <header>
-            <h1><strong>LakeBrite</strong> Simulator</h1>
-            <div class="controls">
-                <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-default"><input name="spin" type="checkbox" autocomplete="off"> Spin</label>
-                    <label class="btn btn-default"><input name="axes" type="checkbox" autocomplete="off"> Axes</label>
-                </div>
-                <div class="btn-group gif-select">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Select GIF <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="images/animations/animation1.gif">Animation 1</a></li>
-                        <li><a href="images/animations/animation2.gif">Animation 2</a></li>
-                        <li><a href="images/animations/animation3.gif">Animation 3</a></li>
-                        <li><a href="images/animations/animation4.gif">Animation 4</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="images/animations/animation5.png">Animation 5 (APNG)</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="images/animations/temperature.gif">Lake Temperature</a></li>
-                        <li><a href="images/animations/aug-4-storm-jet-palette.gif">August 4 Storm - Jet</a></li>
-                        <li><a href="images/animations/aug-4-storm-spectral-palette.gif">August 4 Storm - Spectral</a></li>
-                        <li><a href="images/animations/lake-temp-august.gif">Lake Temperature Rainbow</a></li>
-                        <li><a href="images/animations/lake-temp-clipped-full-season.gif">Lake Temperature Clipped</a></li>
-                        <li><a href="images/animations/secchi-depth-full.gif">Secchi Depth</a></li>
-                        <li><a href="images/animations/secchi-depth-lake-clip.gif">Secchi Depth Clipped</a></li>
-                        <li><a href="images/animations/ts-irene.gif">Irene</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="images/animations/fish.gif">Fish</a></li>
-                    </ul>
-                </div>
-            </div>
-        </header>
-
-        <div id="container"></div>
-
-        <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tweenjs/0.6.1/tweenjs.min.js"></script>
-        <script src="js/three.min.js"></script>
-        <script src="js/Detector.js"></script>
-        <script src="js/OrbitControls.js"></script>
-        <script src="js/stats.min.js"></script>
-        <script src="js/libgif.js"></script>
-        <script src="js/apng-canvas.min.js"></script>
-
-<script>
-            /**
+/**
  * LED Cube simulator in THREE.js
  *
  * Effects/animations from:
@@ -79,7 +19,9 @@ var container,
     resolutionX = 50,
     resolutionY = 15,
     resolutionZ = 10,
-    scale = 100,
+    distanceX = 8,
+    distanceY = 6,
+    layerOffset = true,
     particles,
     texture,
     start = 0,
@@ -142,6 +84,9 @@ var gifPlayer = function(src) {
             colors.push(color);
         }
 
+        // console.log(particles.geometry.vertices.length);
+        // console.log(colors.length);
+
         particles.geometry.colors = colors;
         particles.geometry.colorsNeedUpdate = true;
     };
@@ -149,8 +94,8 @@ var gifPlayer = function(src) {
 
 var guiParams = {
     gif: 'images/animations/animation5.png',
-    spin: false,
-    axes: true
+    spin: true,
+    axes: false
 };
 
 var animation = gifPlayer(guiParams.gif);
@@ -176,7 +121,7 @@ function initScene() {
 
     camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
     scene.add(camera);
-    camera.position.set(0, 0, 160);
+    camera.position.set(-50, 50, 50);
     camera.lookAt(scene.position);
 
     // renderer
@@ -195,12 +140,12 @@ function initScene() {
     controls.autoRotate = guiParams.spin;
 
     // Overall offset for the array
-    // var offset_x = -distanceX * (resolutionX - 1) / 4,
-    //     offset_y = distanceY * (resolutionY - 1) / 2,
-    //     offset_z = distanceY * (resolutionZ - 1) / 2;
+    var offset_x = -distanceX * (resolutionX - 1) / 4,
+        offset_y = distanceY * (resolutionY - 1) / 2,
+        offset_z = distanceY * (resolutionZ - 1) / 2;
 
     var pointsMaterial = new THREE.PointsMaterial({
-        size: 0.75,
+        size: 6,
         map: texture,
         vertexColors: THREE.VertexColors,
         transparent: true,
@@ -208,33 +153,36 @@ function initScene() {
     });
 
     // Create the vertices
-    geometry = new THREE.Geometry();
+    // var geometry = new THREE.Geometry();
+    // for (var i = 0; i < resolutionX * resolutionY * resolutionZ; i++) {
+    //     var vertex = new THREE.Vector3(getRandomInRange(-100, 100), getRandomInRange(-100, 100), getRandomInRange(-100, 100));
+    //     geometry.vertices.push(vertex);
+    // }
 
-    cylinder = new THREE.CylinderGeometry(10, 10, 200, 49, 99, true);
-    cylinder.rotateX(1.5708);
-    geometry.vertices = cylinder.vertices;
+    // var geometry = new THREE.SphereGeometry( 100, 75, 75 );
+    var geometry = new THREE.IcosahedronGeometry( 100, 4 );
 
-    cloud = [];
-    for (var i = 0; i < cylinder.vertices.length; i++) {
-        var vertex = new THREE.Vector3(getRandomInt(-100, 100), getRandomInt(-100, 100), getRandomInt(-100, 100));
-        cloud.push(vertex);
+    for (var i = 0; i < geometry.vertices.length; i++) {
+        var vertex = geometry.vertices[i];
+
+        vertex.multiplyScalar(getRandomInRange(1, 3));
+        vertex.add( new THREE.Vector3( getRandomInRange(-5, 5), getRandomInRange(-5, 5), getRandomInRange(-5, 5) ) );
     }
-    // geometry.vertices = cloud;
-
 
     // Create the initial colors
     var colors = [];
-    for (var i = 0; i < geometry.vertices.length; i++) {
+    for (var i = 0; i < resolutionX * resolutionY * resolutionZ; i++) {
         colors.push(new THREE.Color(0x0));
     }
     geometry.colors = colors;
 
     // Create the particle system and add it to the scene
     particles = new THREE.Points(geometry, pointsMaterial);
+    // particles.position.set(-100, -100, -100);
     scene.add(particles);
 
     // axes
-    axes = buildAxes(1000);
+    axes = buildAxes(100);
     if (guiParams.axes) {
         scene.add(axes);
     }
@@ -287,6 +235,46 @@ function animate() {
     stats.update();
 }
 
+function cube_check_coords(x, y, z) {
+    return (x >= 0 && x < resolutionX && y >= 0 && y < resolutionY && z >= 0 && z < resolutionZ);
+}
+
+function cube_get_color(x, y, z) {
+    if (!cube_check_coords(x, y, z)) {
+        return -1;
+    }
+
+    var i = ( (z * resolutionX * resolutionY) + (y * resolutionX) + (x) ),
+        color = particles.geometry.colors[i];
+
+    return color.getHex();
+}
+
+function cube_set_color(x, y, z, color) {
+    if (!cube_check_coords(x, y, z)) {
+        return -1;
+    }
+
+    var i = ( (z * resolutionX * resolutionY) + (y * resolutionX) + (x) );
+
+    particles.geometry.colors[i].setHex(color);
+    particles.geometry.colorsNeedUpdate = true;
+}
+
+function cube_clear(color) {
+    if (typeof color === 'undefined') {
+        color = 0x0;
+    }
+
+    var colors = [];
+    for (var i = 0; i < resolutionX * resolutionY * resolutionZ; i++) {
+        colors.push(new THREE.Color(color));
+    }
+
+    particles.geometry.colors = colors;
+    particles.geometry.colorsNeedUpdate = true;
+}
+
 function buildAxes( length ) {
     var axes = new THREE.Object3D();
 
@@ -329,14 +317,10 @@ function RGB2Hex(r, g, b) {
     return hex;
 }
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+function getRandomInRange(min, max) {
+    return Math.random() * (max - min) + min;
 }
 
 $(document).ready(function () {
     initGUI();
 });
-</script>
-
-    </body>
-</html>

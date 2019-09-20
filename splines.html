@@ -188,6 +188,11 @@
 
 			tube = new THREE.TubeGeometry(extrudePath, segments, 2, radiusSegments, closed2);
 
+			for (var i = 0; i < tube.vertices.length; i++) {
+		        var vertex = tube.vertices[i];
+		        vertex.add( new THREE.Vector3( getRandomInRange(-0.25, 0.25), getRandomInRange(-0.25, 0.25), getRandomInRange(-0.25, 0.25) ) );
+		    }
+
 			addGeometry(tube, 0xff00ff);
 			setScale();
 
@@ -198,10 +203,13 @@
 			tubeMesh.scale.set( scale, scale, scale );
 		}
 
+		function getRandomInRange(min, max) {
+		    return Math.random() * (max - min) + min;
+		}
 
 		function addGeometry( geometry, color ) {
 			var pointsMaterial = new THREE.PointsMaterial({
-		        size: 0.15,
+		        size: 1,
 		        map: texture,
 		        vertexColors: THREE.VertexColors,
 		        transparent: true,

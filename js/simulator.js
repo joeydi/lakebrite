@@ -142,7 +142,7 @@ function initScene() {
 
     var pointsMaterial = new THREE.PointsMaterial({
         size: 4,
-        map: texture,
+        // map: texture,
         vertexColors: THREE.VertexColors,
         transparent: true,
         alphaTest: 0.5

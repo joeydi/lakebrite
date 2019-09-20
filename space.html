@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>LakeBrite Simulator</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <script src="https://use.typekit.net/kzo6vxm.js"></script>
+        <script>try{Typekit.load({ async: true });}catch(e){}</script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css" />
+    </head>
+
+    <body>
+        <header>
+            <h1><strong>LakeBrite</strong> Simulator</h1>
+            <div class="controls">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default"><input name="spin" type="checkbox" autocomplete="off"> Spin</label>
+                    <label class="btn btn-default"><input name="axes" type="checkbox" autocomplete="off"> Axes</label>
+                </div>
+                <div class="btn-group gif-select">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select GIF <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a href="images/animations/animation1.gif">Animation 1</a></li>
+                        <li><a href="images/animations/animation2.gif">Animation 2</a></li>
+                        <li><a href="images/animations/animation3.gif">Animation 3</a></li>
+                        <li><a href="images/animations/animation4.gif">Animation 4</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="images/animations/animation5.png">Animation 5 (APNG)</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="images/animations/temperature.gif">Lake Temperature</a></li>
+                        <li><a href="images/animations/aug-4-storm-jet-palette.gif">August 4 Storm - Jet</a></li>
+                        <li><a href="images/animations/aug-4-storm-spectral-palette.gif">August 4 Storm - Spectral</a></li>
+                        <li><a href="images/animations/lake-temp-august.gif">Lake Temperature Rainbow</a></li>
+                        <li><a href="images/animations/lake-temp-clipped-full-season.gif">Lake Temperature Clipped</a></li>
+                        <li><a href="images/animations/secchi-depth-full.gif">Secchi Depth</a></li>
+                        <li><a href="images/animations/secchi-depth-lake-clip.gif">Secchi Depth Clipped</a></li>
+                        <li><a href="images/animations/ts-irene.gif">Irene</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="images/animations/fish.gif">Fish</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <div id="container"></div>
+
+        <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script src="js/three.min.js"></script>
+        <script src="js/Detector.js"></script>
+        <script src="js/OrbitControls.js"></script>
+        <script src="js/stats.min.js"></script>
+        <script src="js/libgif.js"></script>
+        <script src="js/apng-canvas.min.js"></script>
+        <script src="js/space.js"></script>
+</body>
+</html>
