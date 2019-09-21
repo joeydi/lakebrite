@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - geometry - shapes</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="/css/main.css" />
+		<style>
+			body {
+				margin: 0;
+				background-color: #333 !important;
+				overflow: hidden;
+			}
+
+			#stats {
+				position: fixed;
+				right: 10px;
+				bottom: 10px;
+			}
+
+			.loader {
+				display: none;
+			}
+
+			nav {
+				position: absolute;
+				left: 10px;
+				top: 10px;
+				width: calc(100% - 20px);
+				display: flex;
+				align-items: center;
+				background-color: white;
+				color: black;
+			}
+
+			nav h1 {
+				margin: 1rem;
+			}
+
+			nav h1 em {
+				font-weight: 300;
+				font-style: normal;
+			}
+
+			form {
+				display: flex;
+				align-items: center;
+			}
+
+			form > div {
+				margin: 1rem;
+			}
+
+			label {
+				display: block;
+				font-family: 'Roboto Mono', sans-serif;
+				font-size: 12px;
+				font-weight: 700;
+				text-transform: uppercase;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="loader">
+			<h1>LakeBrite <em>Splineballs</em></h1>
+		</div>
+		<nav>
+			<h1>LakeBrite <em>Splineballs</em></h1>
+			<form>
+				<div>
+					<select id="spline" onchange="addTube(this.value)">
+
+					</select>
+				</div>
+				<div>
+					<label>Scale</label>
+					<select id="scale" onchange="setScale()">
+						<option>1</option>
+						<option>2</option>
+						<option>4</option>
+						<option>6</option>
+						<option>10</option>
+					</select>
+				</div>
+				<div>
+					<label>Extrusion Segments</label>
+					<select onchange="addTube()" id="segments">
+						<option>50</option>
+						<option>150</option>
+						<option>200</option>
+						<option selected>750</option>
+					</select>
+				</div>
+				<div>
+					<label>Radius Segments</label>
+					<select id="radiusSegments" onchange="addTube()">
+						<option>1</option>
+						<option>2</option>
+						<option>3</option>
+						<option>4</option>
+						<option>5</option>
+						<option>6</option>
+						<option>8</option>
+						<option selected>50</option>
+					</select>
+				</div>
+				<div>
+					<input id="animation" type="button" onclick="animateCamera(true)" value="Camera Spline Animation View: OFF"/>
+				</div>
+				<div>
+					<label>Look Ahead</label>
+					<input id="lookAhead" type="checkbox" onchange="animateCamera()" />
+				</div>
+				<div>
+					<label>Camera Helper</label>
+					<input id="cameraHelper" type="checkbox" onchange="animateCamera()" />
+				</div>
+				<div>
+					<label>Closed</label>
+					<input id="closed" onchange="addTube()" type="checkbox" checked />
+				</div>
+			</form>
+		</nav>
+		<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+		<script src="/js/three.min.js"></script>
+		<script src="/js/Detector.js"></script>
+		<script src="/js/stats.min.js"></script>
+		<script src="/js/CurveExtras.js"></script>
+		<script src="/js/stats.min.js"></script>
+		<script src="/js/libgif.js"></script>
+        <script src="/js/apng-canvas.min.js"></script>
+        <script src="/js/splines.js"></script>
+	</body>
+</html>
