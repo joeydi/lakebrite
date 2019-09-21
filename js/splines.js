@@ -48,17 +48,10 @@ var splines = {
     PipeSpline: pipeSpline
 };
 
-// var dropdown = '<select id="dropdown" onchange="addTube(this.value)">';
-
-//     var s;
 var splineSelect = $('select#spline');
 for ( spline in splines ) {
     splineSelect.append($('<option />', {value: spline, text: spline}));
-    // dropdown += '<option value="' + s + '"';
-    // dropdown += '>' + s + '</option>';
 }
-
-// dropdown += '</select>';
 
 // This returns an animatable function to update geometry vertexColors
 var gifPlayer = function(src) {
@@ -136,7 +129,7 @@ function RGB2Hex(r, g, b) {
 
 extrudePath = new THREE.Curves.TrefoilKnot();
 
-var closed2 = true;
+var closed = true;
 var parent;
 var tube, tubeMesh;
 var animation = false, lookAhead = false;
@@ -148,7 +141,7 @@ function addTube() {
     var value = document.getElementById('spline').value;
 
     var segments = parseInt(document.getElementById('segments').value);
-    closed2 = document.getElementById('closed').checked;
+    // closed = document.getElementById('closed').checked;
 
     var radiusSegments = parseInt(document.getElementById('radiusSegments').value);
 
@@ -156,7 +149,7 @@ function addTube() {
 
     extrudePath = splines[value];
 
-    tube = new THREE.TubeGeometry(extrudePath, segments, 2, radiusSegments, closed2);
+    tube = new THREE.TubeGeometry(extrudePath, segments, 2, radiusSegments, closed);
 
     for (var i = 0; i < tube.vertices.length; i++) {
         var vertex = tube.vertices[i];
@@ -222,40 +215,6 @@ loader.load('/images/textures/ball.png', function (t) {
     animate();
 });
 
-init_ui();
-
-function init_ui() {
-    var dropdown = '<select id="dropdown" onchange="addTube(this.value)">';
-
-    var s;
-    for ( s in splines ) {
-        dropdown += '<option value="' + s + '"';
-        dropdown += '>' + s + '</option>';
-    }
-
-    dropdown += '</select>';
-    // container = document.createElement('div');
-    // document.body.appendChild(container);
-
-    // var info = document.createElement('div');
-    // info.style.position = 'absolute';
-    // info.style.top = '10px';
-    // info.style.width = '100%';
-    // info.style.textAlign = 'center';
-    // info.innerHTML = 'Spline Extrusion Examples by <a href="http://www.lab4games.net/zz85/blog">zz85</a><br/>Select spline:';
-
-    // info.innerHTML += dropdown;
-
-    // info.innerHTML += '<br/>Scale: <select id="scale" onchange="setScale()"><option>1</option><option>2</option><option>4</option><option>6</option><option>10</option></select>';
-    // info.innerHTML += '<br/>Extrusion Segments: <select onchange="addTube()" id="segments"><option>50</option><option>150</option><option>200</option><option selected>750</option></select>';
-    // info.innerHTML += '<br/>Radius Segments: <select id="radiusSegments" onchange="addTube()"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option selected>50</option></select>';
-    // info.innerHTML += '<br/>Closed:<input id="closed" onchange="addTube()" type="checkbox" checked />';
-
-    // info.innerHTML += '<br/><br/><input id="animation" type="button" onclick="animateCamera(true)" value="Camera Spline Animation View: OFF"/><br/> Look Ahead <input id="lookAhead" type="checkbox" onchange="animateCamera()" /> Camera Helper <input id="cameraHelper" type="checkbox" onchange="animateCamera()" />';
-
-    // container.appendChild(info);
-}
-
 function init() {
 
     camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 1000);
@@ -299,8 +258,8 @@ function init() {
     $('body').append( renderer.domElement );
 
     stats = new Stats();
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.top = '0px';
+    // stats.domElement.style.position = 'absolute';
+    // stats.domElement.style.top = '0px';
     $('body').append( stats.domElement );
 
     renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );

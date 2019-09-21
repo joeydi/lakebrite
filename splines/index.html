@@ -53,10 +53,81 @@
 
 			label {
 				display: block;
+				margin-bottom: 3px;
 				font-family: 'Roboto Mono', sans-serif;
 				font-size: 12px;
 				font-weight: 700;
 				text-transform: uppercase;
+			}
+
+			.slider {
+				/*width: 100px;*/
+			}
+
+			.toggleInput {
+				visibility: hidden;
+			}
+
+			.toggle {
+				position: relative;
+				width: 40px;
+				height: 10px;
+			}
+
+			.toggle input {
+				position: absolute;
+				z-index: 2;
+				left: 0;
+				top: 0;
+				display: block;
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				opacity: 0;
+			}
+
+			.toggle span {
+				position: relative;
+				z-index: 1;
+				left: 0;
+				top: 0;
+				display: block;
+				width: 100%;
+				height: 100%;
+				border-radius: 5px;
+				border: 1px solid black;
+			}
+
+			.toggle span::before {
+				content: " ";
+				position: absolute;
+				left: 2px;
+				top: 2px;
+				display: block;
+				width: 18px;
+				height: 6px;
+				border-radius: 3px;
+				background-color: black;
+				transition: transform 0.25s cubic-bezier(0.18, 0.12, 0.18, 0.99);
+			}
+
+			.toggle input:checked + span::before {
+				transform: translateX(18px);
+			}
+
+			button#animation {
+				padding: 5px 10px;
+				background: transparent;
+				border: 1px solid #ccc;
+				border-radius: 3px;
+				font-family: 'Roboto Mono', sans-serif;
+				font-size: 12px;
+				font-weight: 700;
+				text-transform: uppercase;
+			}
+
+			button#animation span {
+				font-size: 16px;
 			}
 		</style>
 	</head>
@@ -68,56 +139,36 @@
 			<h1>LakeBrite <em>Splineballs</em></h1>
 			<form>
 				<div>
-					<select id="spline" onchange="addTube(this.value)">
-
-					</select>
+					<select id="spline" onchange="addTube(this.value)"></select>
+				</div>
+				<div class="slider">
+					<label for="scale">Scale</label>
+					<input type="range" id="scale" name="scale" min="1" max="100" value="2" oninput="setScale()">
+				</div>
+				<div class="slider">
+					<label for="segments">Extrusion</label>
+					<input type="range" id="segments" name="segments" min="1" max="1000" step="1" value="100" onchange="addTube()">
+				</div>
+				<div class="slider">
+					<label for="radiusSegments">Radius</label>
+					<input type="range" id="radiusSegments" name="radiusSegments" min="1" max="100" step="1" value="10" onchange="addTube()">
 				</div>
 				<div>
-					<label>Scale</label>
-					<select id="scale" onchange="setScale()">
-						<option>1</option>
-						<option>2</option>
-						<option>4</option>
-						<option>6</option>
-						<option>10</option>
-					</select>
+					<label for="lookAhead">Look Ahead</label>
+					<div class="toggle">
+						<input id="lookAhead" name="lookAhead" type="checkbox" onchange="animateCamera()" />
+						<span></span>
+					</div>
 				</div>
 				<div>
-					<label>Extrusion Segments</label>
-					<select onchange="addTube()" id="segments">
-						<option>50</option>
-						<option>150</option>
-						<option>200</option>
-						<option selected>750</option>
-					</select>
+					<label for="cameraHelper">Show Camera</label>
+					<div class="toggle">
+						<input id="cameraHelper" name="cameraHelper" type="checkbox" onchange="animateCamera()" />
+						<span></span>
+					</div>
 				</div>
 				<div>
-					<label>Radius Segments</label>
-					<select id="radiusSegments" onchange="addTube()">
-						<option>1</option>
-						<option>2</option>
-						<option>3</option>
-						<option>4</option>
-						<option>5</option>
-						<option>6</option>
-						<option>8</option>
-						<option selected>50</option>
-					</select>
-				</div>
-				<div>
-					<input id="animation" type="button" onclick="animateCamera(true)" value="Camera Spline Animation View: OFF"/>
-				</div>
-				<div>
-					<label>Look Ahead</label>
-					<input id="lookAhead" type="checkbox" onchange="animateCamera()" />
-				</div>
-				<div>
-					<label>Camera Helper</label>
-					<input id="cameraHelper" type="checkbox" onchange="animateCamera()" />
-				</div>
-				<div>
-					<label>Closed</label>
-					<input id="closed" onchange="addTube()" type="checkbox" checked />
+					<button id="animation" type="button" onclick="animateCamera(true)">Fly <span>🚀</span></button>
 				</div>
 			</form>
 		</nav>
