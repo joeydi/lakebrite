@@ -138,15 +138,14 @@ var scale;
 var showCameraHelper = false;
 
 function addTube() {
-
     var value = document.getElementById('spline').value;
-
     var segments = parseInt(document.getElementById('segments').value);
-    // closed = document.getElementById('closed').checked;
-
+    var randomVertices = document.getElementById('randomVertices').value;
     var radiusSegments = parseInt(document.getElementById('radiusSegments').value);
 
-    if (tubeMesh) parent.remove(tubeMesh);
+    if (tubeMesh) {
+        parent.remove(tubeMesh)
+    };
 
     extrudePath = splines[value];
 
@@ -154,8 +153,14 @@ function addTube() {
 
     for (var i = 0; i < tube.vertices.length; i++) {
         var vertex = tube.vertices[i];
-        // vertex.add( new THREE.Vector3( getRandomInRange(-0.25, 0.25), getRandomInRange(-0.25, 0.25), getRandomInRange(-0.25, 0.25) ) );
-        vertex.add( new THREE.Vector3( 0, 0, 0 ) );
+
+        vertex.add(
+            new THREE.Vector3(
+                getRandomInRange(-randomVertices, randomVertices),
+                getRandomInRange(-randomVertices, randomVertices),
+                getRandomInRange(-randomVertices, randomVertices)
+            )
+        );
     }
 
     addGeometry(tube, 0xff00ff);
