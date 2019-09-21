@@ -50,8 +50,10 @@ var splines = {
 
 var splineSelect = $('select#spline');
 for ( spline in splines ) {
-    splineSelect.append($('<option />', {value: spline, text: spline}));
+    var option = $('<option />', {value: spline, text: spline});
+    splineSelect.append(option);
 }
+splineSelect.val('GrannyKnot');
 
 // This returns an animatable function to update geometry vertexColors
 var gifPlayer = function(src) {
@@ -78,7 +80,7 @@ var gifPlayer = function(src) {
             gif: img,
             loop_mode: true,
             auto_play: true,
-            draw_while_loading: true,
+            draw_while_loading: false,
             show_progress_bar: true
         });
 
@@ -125,7 +127,6 @@ function RGB2Hex(r, g, b) {
     hex |= (r << 16);
     return hex;
 }
-
 
 extrudePath = new THREE.Curves.TrefoilKnot();
 
@@ -215,6 +216,41 @@ loader.load('/images/textures/ball.png', function (t) {
     animate();
 });
 
+window.setTimeout(function () {
+    var tl = new TimelineLite();
+
+    tl.to('.loader h1, .loader span', 1, {
+        y: -20,
+        opacity: 0,
+        ease: Expo.easeIn
+    }, 0);
+
+    tl.to('.loader .bg', 0.75, {
+        y: '-101%',
+        ease: Expo.easeIn
+    }, 0.5);
+
+    tl.set('nav', {
+        opacity: 1
+    }, 0);
+
+    tl.fromTo('nav .bg', 0.5, {
+        y: '101%'
+    }, {
+        y: '0%',
+        ease: Expo.easeOut
+    }, 1.25);
+
+    tl.staggerFromTo('nav h1, nav form > div', 1, {
+        y: '101%',
+        opacity: 0
+    }, {
+        y: '0%',
+        opacity: 1,
+        ease: Expo.easeOut
+    }, 0.025, 1.5);
+}, 1000);
+
 function init() {
 
     camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 1000);
@@ -255,11 +291,9 @@ function init() {
     // renderer.setClearColor( 0xf0f0f0 );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
-    $('body').append( renderer.domElement );
+    $('.renderer').append( renderer.domElement );
 
     stats = new Stats();
-    // stats.domElement.style.position = 'absolute';
-    // stats.domElement.style.top = '0px';
     $('body').append( stats.domElement );
 
     renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );

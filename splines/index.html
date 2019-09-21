@@ -17,6 +17,15 @@
 				box-sizing: border-box;
 			}
 
+			.renderer {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+			}
+
 			#stats {
 				position: fixed;
 				right: 10px;
@@ -25,21 +34,29 @@
 
 			.loader {
 				position: fixed;
+				z-index: 10;
 				left: 50%;
 				top: 50%;
 				display: flex;
 				flex-flow: column nowrap;
-				/*height: 80px;*/
 				align-items: center;
 				padding: 20px 30px;
+				overflow: hidden;
 				transform: translate(-50%, -50%);
-				background-color: white;
 				color: black;
+			}
+
+			.loader .bg {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: white;
 			}
 
 			.loader h1 {
 				margin: 0;
-				/*line-height: 20px;*/
 			}
 
 			.loader h1 em {
@@ -59,17 +76,31 @@
 
 			nav {
 				position: absolute;
+				z-index: 10;
 				left: 10px;
 				top: 10px;
 				width: calc(100% - 20px);
 				display: flex;
 				align-items: center;
-				background-color: white;
 				color: black;
 				transform: translate3d(0, 0, 0);
+				opacity: 0;
+				overflow: hidden;
+			}
+
+			nav .bg {
+				position: absolute;
+				z-index: 0;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: white;
 			}
 
 			nav h1 {
+				position: relative;
+				z-index: 1;
 				margin: 1rem;
 			}
 
@@ -79,6 +110,8 @@
 			}
 
 			form {
+				position: relative;
+				z-index: 1;
 				display: flex;
 				align-items: center;
 			}
@@ -97,6 +130,12 @@
 				text-transform: uppercase;
 			}
 
+			select {
+				border: 1px solid black;
+				border-radius: 0;
+				background: transparent;
+			}
+
 			.toggleInput {
 				visibility: hidden;
 			}
@@ -104,7 +143,7 @@
 			.toggle {
 				position: relative;
 				width: 40px;
-				height: 10px;
+				height: 12px;
 			}
 
 			.toggle input {
@@ -127,7 +166,7 @@
 				display: block;
 				width: 100%;
 				height: 100%;
-				border-radius: 5px;
+				border-radius: 6px;
 				border: 1px solid black;
 			}
 
@@ -145,8 +184,95 @@
 			}
 
 			.toggle input:checked + span::before {
-				transform: translateX(18px);
+				transform: translateX(16px);
 			}
+
+			input[type=range] {
+			-webkit-appearance: none;
+			width: 100%;
+			margin: 4px 0;
+			}
+			input[type=range]:focus {
+			outline: none;
+			}
+			input[type=range]::-webkit-slider-runnable-track {
+			width: 100%;
+			height: 2px;
+			cursor: pointer;
+			box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+			background: #000000;
+			border-radius: 0px;
+			border: 0px solid #010101;
+			}
+			input[type=range]::-webkit-slider-thumb {
+			box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+			border: 0px solid #000000;
+			height: 10px;
+			width: 10px;
+			border-radius: 5px;
+			background: #000000;
+			cursor: pointer;
+			-webkit-appearance: none;
+			margin-top: -4px;
+			}
+			input[type=range]:focus::-webkit-slider-runnable-track {
+			background: #0d0d0d;
+			}
+			input[type=range]::-moz-range-track {
+			width: 100%;
+			height: 2px;
+			cursor: pointer;
+			box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+			background: #000000;
+			border-radius: 0px;
+			border: 0px solid #010101;
+			}
+			input[type=range]::-moz-range-thumb {
+			box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+			border: 0px solid #000000;
+			height: 10px;
+			width: 10px;
+			border-radius: 5px;
+			background: #000000;
+			cursor: pointer;
+			}
+			input[type=range]::-ms-track {
+			width: 100%;
+			height: 2px;
+			cursor: pointer;
+			background: transparent;
+			border-color: transparent;
+			color: transparent;
+			}
+			input[type=range]::-ms-fill-lower {
+			background: #000000;
+			border: 0px solid #010101;
+			border-radius: 0px;
+			box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+			}
+			input[type=range]::-ms-fill-upper {
+			background: #000000;
+			border: 0px solid #010101;
+			border-radius: 0px;
+			box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+			}
+			input[type=range]::-ms-thumb {
+			box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+			border: 0px solid #000000;
+			height: 10px;
+			width: 10px;
+			border-radius: 5px;
+			background: #000000;
+			cursor: pointer;
+			height: 2px;
+			}
+			input[type=range]:focus::-ms-fill-lower {
+			background: #000000;
+			}
+			input[type=range]:focus::-ms-fill-upper {
+			background: #0d0d0d;
+			}
+
 
 			button#animation {
 				padding: 5px 10px;
@@ -165,23 +291,20 @@
 		</style>
 	</head>
 	<body>
-		<div class="loader">
-			<h1>LakeBrite <em>Splineballs</em></h1>
-			<span>loading&hellip;</span>
-		</div>
 		<nav>
 			<h1>LakeBrite <em>Splineballs</em></h1>
 			<form>
 				<div>
-					<select id="spline" onchange="addTube(this.value)"></select>
+					<label for="spline">Spline</label>
+					<select id="spline" name="spline" onchange="addTube(this.value)"></select>
 				</div>
 				<div class="slider">
 					<label for="scale">Scale</label>
-					<input type="range" id="scale" name="scale" min="1" max="100" value="2" oninput="setScale()">
+					<input type="range" id="scale" name="scale" min="1" max="100" value="8" oninput="setScale()">
 				</div>
 				<div class="slider">
 					<label for="segments">Extrusion</label>
-					<input type="range" id="segments" name="segments" min="1" max="1000" step="1" value="100" onchange="addTube()">
+					<input type="range" id="segments" name="segments" min="1" max="1000" step="1" value="500" onchange="addTube()">
 				</div>
 				<div class="slider">
 					<label for="radiusSegments">Radius</label>
@@ -205,8 +328,17 @@
 					<button id="animation" type="button" onclick="animateCamera(true)">Fly <span>🚀</span></button>
 				</div>
 			</form>
+			<div class="bg"></div>
 		</nav>
+		<div class="loader">
+			<div class="bg"></div>
+			<h1>LakeBrite <em>Splineballs</em></h1>
+			<span>loading&hellip;</span>
+		</div>
+		<div class="renderer"></div>
 		<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TimelineLite.min.js"></script>
 		<script src="/js/three.min.js"></script>
 		<script src="/js/Detector.js"></script>
 		<script src="/js/stats.min.js"></script>
