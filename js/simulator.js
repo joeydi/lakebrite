@@ -1,11 +1,5 @@
 /**
  * LED Cube simulator in THREE.js
- *
- * Effects/animations from:
- *      http://www.instructables.com/id/Led-Cube-8x8x8/ by Christian Moen and
- *          Ståle Kristoffersen.
- *      http://www.kevindarrah.com/?cat=99 by Kevin Darrah
- *
  */
 
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
