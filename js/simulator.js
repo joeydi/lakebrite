@@ -84,7 +84,7 @@ var gifPlayer = function(src) {
 
 var guiParams = {
     gif: 'images/animations/animation5.png',
-    spin: false,
+    spin: true,
     axes: false
 };
 
@@ -111,7 +111,7 @@ function initScene() {
 
     camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
     scene.add(camera);
-    camera.position.set(-80, 0, 350);
+    camera.position.set(120, 40, 200);
     camera.lookAt(scene.position);
 
     // renderer
@@ -136,7 +136,7 @@ function initScene() {
 
     var pointsMaterial = new THREE.PointsMaterial({
         size: 4,
-        // map: texture,
+        map: texture,
         vertexColors: THREE.VertexColors,
         transparent: true,
         alphaTest: 0.5
