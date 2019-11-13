@@ -71,6 +71,10 @@ canvas[data-apng-src] {
     bottom: 0;
 }
 
+canvas {
+    display: block;
+}
+
 #stats {
     display: inline-block;
     width: auto !important;
