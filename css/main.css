@@ -73,6 +73,11 @@ canvas[data-apng-src] {
 
 canvas {
     display: block;
+    cursor: grab;
+}
+
+canvas:active {
+    cursor: grabbing;
 }
 
 #stats {
