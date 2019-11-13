@@ -83,7 +83,7 @@ var gifPlayer = function(src) {
 };
 
 var guiParams = {
-    gif: 'images/animations/fmm.png',
+    gif: 'images/animations/animation5.png',
     spin: false,
     axes: false
 };
