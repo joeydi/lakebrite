@@ -256,6 +256,11 @@ window.setTimeout(function () {
     }, 0.025, 1.5);
 }, 1000);
 
+
+window.setTimeout(function () {
+    animateCamera(true);
+}, 3000);
+
 function init() {
 
     camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 1000);
